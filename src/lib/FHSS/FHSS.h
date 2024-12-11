@@ -80,27 +80,26 @@ static inline uint32_t FHSSgetChannelCount(void)
 // get the number of entries in the FHSS sequence
 static inline uint16_t FHSSgetSequenceCount()
 {
-    // if (FHSSuseDualBand) // Use the smaller of the 2 bands as not to go beyond the max index for each sequence.
-    // {
-    //     if (primaryBandCount > secondaryBandCount)
-    //     {
-    //         return primaryBandCount;
-    //     }
-    //     else
-    //     {
-    //         return secondaryBandCount;
-    //     }
-    // }
+    if (FHSSuseDualBand) // Use the smaller of the 2 bands as not to go beyond the max index for each sequence.
+    {
+        if (primaryBandCount < secondaryBandCount)
+        {
+            return primaryBandCount;
+        }
+        else
+        {
+            return secondaryBandCount;
+        }
+    }
 
-    // if (FHSSusePrimaryFreqBand)
-    // {
-    //     return primaryBandCount;
-    // }
-    // else
-    // {
-    //     return secondaryBandCount;
-    // }
-    return (secondaryBandCount);
+    if (FHSSusePrimaryFreqBand)
+    {
+        return primaryBandCount;
+    }
+    else
+    {
+        return secondaryBandCount;
+    }
 }
 
 // get the initial frequency, which is also the sync channel

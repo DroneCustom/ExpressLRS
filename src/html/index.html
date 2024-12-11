@@ -1,4 +1,4 @@
-@@require(PLATFORM, VERSION, isTX, lowGHz, HigGHz, chip, is8285)
+@@require(PLATFORM, VERSION, isTX, hasSubGHz, is8285)
 <!DOCTYPE HTML>
 <html lang="en">
 
@@ -25,7 +25,7 @@
 				<li><a data-mui-toggle="tab" data-mui-controls="pane-justified-3">Model</a></li>
 @@end
 				<li><a data-mui-toggle="tab" data-mui-controls="pane-justified-1">Options</a></li>
-				<net><a id="network-tab" data-mui-toggle="tab" data-mui-controls="pane-justified-4">WiFi</a></net>
+				<li><a id="network-tab" data-mui-toggle="tab" data-mui-controls="pane-justified-4">WiFi</a></li>
 @@if isTX:
 				<li id="button-tab"><a data-mui-toggle="tab" data-mui-controls="pane-justified-3">Buttons</a></li>
 @@end
@@ -35,7 +35,7 @@
 			<div class="mui-tabs__pane" id="pane-justified-1">
 				<div class="mui-panel">
 					<h2>Runtime Options</h2>
-					<!--This form <b>overrides</b> the options provided when the firmware was flashed. These changes will persist across reboots, but <b>will be reset</b> when the firmware is reflashed.-->
+					This form <b>overrides</b> the options provided when the firmware was flashed. These changes will persist across reboots, but <b>will be reset</b> when the firmware is reflashed.
 @@if isTX:
 					Note: The Binding phrase is <b>not</b> remembered, it is a temporary field used to generate the binding UID.
 					<br/><br/>
@@ -50,12 +50,13 @@
 							<input size='40' id='uid' name='uid' type='text' class='array' readonly/>
 						</div>
 @@else:
-					<!--<br/><br/>-->
+					<br/><br/>
 					<form id='upload_options' method='POST' action="/options">
 @@end
-@@if chip == 'SX127X' or chip == 'LR1121':
+@@if hasSubGHz:
 						<div class="mui-select">
-							<select id='domain0' name='domain0'>
+							<select id='domain' name='domain'>
+								<option value='0'>W750</option>
 								<option value='1'>W760</option>
 								<option value='2'>W770</option>
 								<option value='3'>W865</option>
@@ -78,19 +79,22 @@
 								<option value='20'>W940</option>
 								<option value='21'>W950</option>
 								<option value='22'>W960</option>
-								<option value='0'>W970</option>
-								<option value='23'>W980</option>
+								<option value='23'>W970</option>
+								<option value='24'>W980</option>
+								<option value='25'>W990</option>
+								<option value='26'>W1000</option>
+								<option value='27'>W1010</option>
+								<option value='28'>W1018</option>
 							</select>
-							<label for="domain0">Regulatory domain</label>
+							<label for="domain">Regulatory domain</label>
 						</div>
-@@end
-@@if chip == 'SX128X':
+@@else:
 <div class="mui-select">
-	<select id='domain0' name='domain0'>
-		<option value='1'>W2100</option>
-		<option value='2'>W2150</option>
-		<option value='3'>W2200</option>
-		<option value='0'>W2250</option>
+	<select id='domain' name='domain'>
+		<option value='0'>W2100</option>
+		<option value='1'>W2150</option>
+		<option value='2'>W2200</option>
+		<option value='3'>W2250</option>
 		<option value='4'>W2300</option>
 		<option value='5'>W2350</option>
 		<option value='6'>W2400</option>
@@ -101,33 +105,13 @@
 		<option value='11'>W2650</option>
 		<option value='12'>W2700</option>
 	</select>
-	<label for="domain0">Regulatory domain</label>
+	<label for="domain">Regulatory domain</label>
 </div>
 @@end
-@@if chip == 'LR1121':
-<div class="mui-select">
-	<select id='domain1' name='domain1'>
-		<option value='25'>W2100</option>
-		<option value='26'>W2150</option>
-		<option value='27'>W2200</option>
-		<option value='0'>W2250</option>
-		<option value='28'>W2300</option>
-		<option value='29'>W2350</option>
-		<option value='30'>W2400</option>
-		<option value='31'>W2450</option>
-		<option value='32'>W2500</option>
-		<option value='33'>W2550</option>
-		<option value='34'>W2600</option>
-		<option value='35'>W2650</option>
-		<option value='36'>W2700</option>
-	</select>
-	<label for="domain1">Regulatory domain</label>
-</div>
-@@end
-						<net><div class="mui-textfield">
+						<div class="mui-textfield">
 							<input size='3' id='wifi-on-interval' name='wifi-on-interval' type='text' placeholder="Disabled"/>
 							<label for="wifi-on-interval">WiFi "auto on" interval in seconds (leave blank to disable)</label>
-						</div></net>
+						</div>
 @@if isTX:
 						<div class="mui-textfield">
 							<input size='5' id='tlm-interval' name='tlm-interval' type='text'/>
@@ -150,7 +134,7 @@
 							<label for="airport-uart-baud">AirPort UART baud</label>
 						</div>
 @@else:
-						<net><div id="baud-config" class="mui-textfield"  style="display: block;">
+						<div id="baud-config" class="mui-textfield"  style="display: block;">
 							<input size='7' id='rcvr-uart-baud' name='rcvr-uart-baud' type='text'/>
 							<label for="rcvr-uart-baud">UART baud</label>
 						</div>
@@ -161,7 +145,7 @@
 						<div class="mui-checkbox">
 							<input id='is-airport' name='is-airport' type='checkbox'/>
 							<label for="is-airport">Use as AirPort Serial device</label>
-						</div></net>
+						</div>
 @@end
 						<button id='submit-options' class="mui-btn mui-btn--primary" disabled>Save</button>
 						<div id="reset-options" style="display: none;">
@@ -277,7 +261,6 @@
 					</div>
 					<form class="mui-form" action='/config' id='config' method='POST'>
 						<h2>Binding Phrase</h2>
-						<net>
 						<div class="mui-select">
 							<select id="vbind" name="vbind">
 								<option value="0">Persistent (Default) - Bind information is stored across reboots</option>
@@ -286,12 +269,11 @@
 							</select>
 							<label for="vbind">Binding storage</label>
 						</div>
-						</net>
 						<div id="bindphrase">
-							<!--Enter a new binding phrase to replace the current binding information.
+							Enter a new binding phrase to replace the current binding information.
 							This will persist across reboots, but <b>will be reset</b> if the firmware is flashed with a binding phrase.
 							Note: The Binding phrase is not remembered, it is a temporary field used to generate the binding UID.
-							<br/><br/>-->
+							<br/><br/>
 							<div class="mui-textfield">
 								<input type="text" id="phrase" name="phrase" placeholder="Binding Phrase" />
 								<label for="phrase">Binding Phrase</label>
@@ -302,7 +284,6 @@
 								<input size="40" id="uid" name="uid" type="text" class="array" readonly/>
 							</div>
 						</div>
-						<net>
 						<div id="serial-config">
 							<h2>Serial Protocol</h2>
 							Set the protocol used to communicate with the flight controller or other external devices.
@@ -374,7 +355,6 @@
 							<input id='force-tlm' name='force-tlm' type='checkbox' value="1"/>
 							<label for="force-tlm">Force telemetry OFF on this receiver</label>
 						</div>
-						</net>
 						<button type='submit' class="mui-btn mui-btn--small mui-btn--primary">Save</button>
 					</form>
 				</div>
@@ -435,5 +415,4 @@
 </body>
 <script src="mui.js"></script>
 <script src="scan.js"></script>
-<script src="lr1121.js"></script>
 </html>

@@ -1,4 +1,3 @@
 -DMY_BINDING_PHRASE="riches222"
--DRegulatory_Domain_W2300
 -DRegulatory_Domain_IN_866
 -DAUTO_WIFI_ON_INTERVAL="86400"

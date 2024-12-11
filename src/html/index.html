@@ -1,4 +1,4 @@
-@@require(PLATFORM, VERSION, isTX, lowGHz, HigGHz, chip, is8285)
+@@require(PLATFORM, VERSION, isTX, hasSubGHz, is8285)
 <!DOCTYPE HTML>
 <html lang="en">
 
@@ -53,9 +53,10 @@
 					<br/><br/>
 					<form id='upload_options' method='POST' action="/options">
 @@end
-@@if chip == 'SX127X' or chip == 'LR1121':
+@@if hasSubGHz:
 						<div class="mui-select">
-							<select id='domain0' name='domain0'>
+							<select id='domain' name='domain'>
+								<option value='0'>W750</option>
 								<option value='1'>W760</option>
 								<option value='2'>W770</option>
 								<option value='3'>W865</option>
@@ -78,19 +79,22 @@
 								<option value='20'>W940</option>
 								<option value='21'>W950</option>
 								<option value='22'>W960</option>
-								<option value='0'>W970</option>
-								<option value='23'>W980</option>
+								<option value='23'>W970</option>
+								<option value='24'>W980</option>
+								<option value='25'>W990</option>
+								<option value='26'>W1000</option>
+								<option value='27'>W1010</option>
+								<option value='28'>W1018</option>
 							</select>
-							<label for="domain0">Regulatory domain</label>
+							<label for="domain">Regulatory domain</label>
 						</div>
-@@end
-@@if chip == 'SX128X':
+@@else:
 <div class="mui-select">
-	<select id='domain0' name='domain0'>
-		<option value='1'>W2100</option>
-		<option value='2'>W2150</option>
-		<option value='3'>W2200</option>
-		<option value='0'>W2250</option>
+	<select id='domain' name='domain'>
+		<option value='0'>W2100</option>
+		<option value='1'>W2150</option>
+		<option value='2'>W2200</option>
+		<option value='3'>W2250</option>
 		<option value='4'>W2300</option>
 		<option value='5'>W2350</option>
 		<option value='6'>W2400</option>
@@ -101,27 +105,7 @@
 		<option value='11'>W2650</option>
 		<option value='12'>W2700</option>
 	</select>
-	<label for="domain0">Regulatory domain</label>
-</div>
-@@end
-@@if chip == 'LR1121':
-<div class="mui-select">
-	<select id='domain1' name='domain1'>
-		<option value='25'>W2100</option>
-		<option value='26'>W2150</option>
-		<option value='27'>W2200</option>
-		<option value='0'>W2250</option>
-		<option value='28'>W2300</option>
-		<option value='29'>W2350</option>
-		<option value='30'>W2400</option>
-		<option value='31'>W2450</option>
-		<option value='32'>W2500</option>
-		<option value='33'>W2550</option>
-		<option value='34'>W2600</option>
-		<option value='35'>W2650</option>
-		<option value='36'>W2700</option>
-	</select>
-	<label for="domain1">Regulatory domain</label>
+	<label for="domain">Regulatory domain</label>
 </div>
 @@end
 						<div class="mui-textfield">
@@ -431,5 +415,4 @@
 </body>
 <script src="mui.js"></script>
 <script src="scan.js"></script>
-<script src="lr1121.js"></script>
 </html>

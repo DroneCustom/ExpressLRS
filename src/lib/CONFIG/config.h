@@ -223,7 +223,7 @@ typedef struct __attribute__((packed)) {
     } vbat;
     uint8_t     bindStorage:2,     // rx_config_bindstorage_t
                 power:4,
-                antennaMode:1;      // 0=0, 1=1, 2=Diversity
+                antennaMode:2;      // 0=0, 1=1, 2=Diversity
     uint8_t     powerOnCounter:3,
                 forceTlmOff:1,
                 rateInitialIdx:4;   // Rate to start rateCycling at on boot

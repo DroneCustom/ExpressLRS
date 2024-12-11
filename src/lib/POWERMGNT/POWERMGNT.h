@@ -13,7 +13,7 @@
     #define MaxPower PWR_10mW
 #endif
 
-#if !defined(DefaultPower) || defined(RADIO_LR1121)
+#if !defined(DefaultPower)
     #define DefaultPower PWR_50mW
 #endif
 

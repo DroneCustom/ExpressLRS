@@ -386,8 +386,4 @@ body, input, select, textarea {
 	border-radius: 5px;
   }
 
-  net {
-	display: none;
-  }
-
   @@include("mui.css")

@@ -38,42 +38,24 @@ __attribute__ ((used)) static firmware_options_t flashedOptions = {
     ._magic_ = {0xBE, 0xEF, 0xBA, 0xBE, 0xCA, 0xFE, 0xF0, 0x0D},
     ._version_ = 1,
 #if defined(Regulatory_Domain_ISM_2400)
-    .domain0 = 0,
-    .domain1 = 0,
-    .domain2 = 0,
+    .domain = 0,
 #else
     #if defined(Regulatory_Domain_AU_915)
-    .domain0 = 0,
-    .domain1 = 0,
-    .domain2 = 0,
+    .domain = 0,
     #elif defined(Regulatory_Domain_FCC_915)
-    .domain0 = 1,
-    .domain1 = 1,
-    .domain2 = 1,
+    .domain = 1,
     #elif defined(Regulatory_Domain_EU_868)
-    .domain0 = 2,
-    .domain1 = 2,
-    .domain2 = 2,
+    .domain = 2,
     #elif defined(Regulatory_Domain_IN_866)
-    .domain0 = 3,
-    .domain1 = 3,
-    .domain2 = 3,
+    .domain = 3,
     #elif defined(Regulatory_Domain_AU_433)
-    .domain0 = 4,
-    .domain1 = 4,
-    .domain2 = 4,
+    .domain = 4,
     #elif defined(Regulatory_Domain_EU_433)
-    .domain0 = 5,
-    .domain1 = 5,
-    .domain2 = 5,
+    .domain = 5,
     #elif defined(Regulatory_Domain_US_433)
-    .domain0 = 6,
-    .domain1 = 6,
-    .domain2 = 6,
+    .domain = 6,
     #elif defined(Regulatory_Domain_US_433_WIDE)
-    .domain0 = 7,
-    .domain1 = 7,
-    .domain2 = 7,
+    .domain = 7,
     #else
     #error No regulatory domain defined, please define one in user_defines.txt
     #endif
@@ -253,9 +235,7 @@ void saveOptions(Stream &stream, bool customised)
     doc["lock-on-first-connection"] = firmwareOptions.lock_on_first_connection;
     #endif
     doc["is-airport"] = firmwareOptions.is_airport;
-    doc["domain0"] = firmwareOptions.domain0;
-    doc["domain1"] = firmwareOptions.domain1;
-    doc["domain2"] = firmwareOptions.domain2;
+    doc["domain"] = firmwareOptions.domain;
     doc["customised"] = customised;
     doc["flash-discriminator"] = firmwareOptions.flash_discriminator;
 
@@ -367,9 +347,7 @@ static void options_LoadFromFlashOrFile(EspFlashStream &strmFlash)
     #endif
     firmwareOptions.lock_on_first_connection = doc["lock-on-first-connection"] | true;
     #endif
-    firmwareOptions.domain0 = doc["domain0"] | 0;
-    firmwareOptions.domain1 = doc["domain1"] | 0;
-    firmwareOptions.domain2 = doc["domain2"] | 0;
+    firmwareOptions.domain = doc["domain"] | 0;
     firmwareOptions.flash_discriminator = doc["flash-discriminator"] | 0U;
 
     builtinOptions.clear();
@@ -383,9 +361,7 @@ void options_SetTrueDefaults()
 {
     JsonDocument doc;
     // The Regulatory Domain is retained, as there is no sensible default
-    doc["domain0"] = firmwareOptions.domain0;
-    doc["domain1"] = firmwareOptions.domain1;
-    doc["domain2"] = firmwareOptions.domain2;
+    doc["domain"] = firmwareOptions.domain;
     doc["flash-discriminator"] = firmwareOptions.flash_discriminator;
 
     File options = SPIFFS.open("/options.json", "w");
